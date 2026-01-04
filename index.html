@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XyrothNight</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <style >
+    .avatar {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Prevent zoom weirdness */
+    object-position: center; /* Keep face centered */
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #02040A;
+            --neon-blue: #00B0FF;
+            --neon-cyan: #00F0FF;
+            --text-primary: #E0E6ED;
+            --text-secondary: #8B95A5;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(0, 176, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Particles Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animated Grid Background Overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 176, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 176, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+            animation: gridScroll 20s linear infinite;
+        }
+
+        @keyframes gridScroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+
+        /* Header */
+        header {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            background: rgba(2, 4, 10, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 176, 255, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--neon-blue);
+            text-shadow: 0 0 20px rgba(0, 176, 255, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neon-blue);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .avatar-container {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .avatar {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 
+                0 0 40px rgba(0, 176, 255, 0.6),
+                0 0 80px rgba(0, 176, 255, 0.3),
+                inset 0 0 40px rgba(0, 176, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 176, 255, 0.3), transparent);
+            animation: avatarShine 3s linear infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes avatarShine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-text {
+            max-width: 600px;
+            opacity: 0;
+        }
+
+        .hero-text h1 {
+            font-size: clamp(36px, 6vw, 72px);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--neon-blue);
+            color: var(--bg-dark);
+            box-shadow: 0 0 20px rgba(0, 176, 255, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px rgba(0, 176, 255, 0.8);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--neon-blue);
+            border: 2px solid var(--neon-blue);
+        }
+
+        .btn-secondary:hover {
+            background: var(--neon-blue);
+            color: var(--bg-dark);
+            transform: translateY(-3px);
+        }
+
+        /* Crypto Ticker */
+        .crypto-ticker {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 176, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            border-top: 1px solid rgba(0, 176, 255, 0.2);
+            z-index: 99;
+        }
+
+        .ticker-content {
+            display: flex;
+            gap: 50px;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ticker-price {
+            color: var(--neon-blue);
+        }
+
+        /* Section Divider */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+            margin: 100px 0;
+            box-shadow: 0 0 20px rgba(0, 176, 255, 0.3);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 100px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+            margin-bottom: 60px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+        }
+
+        /* About Section */
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-content p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            opacity: 0;
+        }
+
+        .highlight-pills {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .pill {
+            padding: 12px 24px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            opacity: 0;
+        }
+
+        .pill:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 176, 255, 0.3);
+            background: rgba(0, 176, 255, 0.1);
+        }
+
+        .pill-icon {
+            width: 20px;
+            height: 20px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .project-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-cyan));
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+
+        .project-card:hover::before {
+            opacity: 0.5;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 20px 60px rgba(0, 176, 255, 0.4);
+        }
+
+        .project-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-cyan));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 176, 255, 0.3);
+        }
+        .project-icon img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    display: block;
+}
+
+        .project-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        /* Research Timeline */
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, var(--neon-blue), transparent);
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 60px;
+            position: relative;
+            opacity: 0;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--neon-blue);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 176, 255, 0.8);
+            z-index: 2;
+        }
+
+        .timeline-content h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--neon-blue);
+        }
+
+        .timeline-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Contact Section */
+        .contact-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .contact-btn {
+            padding: 20px 40px;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .contact-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(0, 176, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .contact-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .contact-btn:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 10px 40px rgba(0, 176, 255, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .contact-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 4, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            backdrop-filter: blur(20px);
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--neon-blue);
+            transform: rotate(90deg);
+        }
+
+        .modal-content h2 {
+            color: var(--neon-blue);
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+
+        .modal-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .modal-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .tag {
+            padding: 6px 14px;
+            background: rgba(0, 176, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--neon-blue);
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(0, 176, 255, 0.1);
+            margin-top: 100px;
+            position: relative;
+            z-index: 1;
+        }
+
+        footer p {
+            color: var(--text-secondary);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .avatar {
+                width: 200px;
+                height: 200px;
+                font-size: 60px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+                padding-left: 50px;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            .crypto-ticker {
+                position: relative;
+            }
+
+            .ticker-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(0, 176, 255, 0.1);
+            border-top: 3px solid var(--neon-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* ================= Typing Hero ================= */
+:root {
+    --tah-padding: 5rem 1.5rem;
+    --tah-min-height: 400px;
+    --tah-bg-color: #111827;
+    --tah-text-color: #e5e7eb;
+    --tah-highlight-color: #38bdf8;
+    --tah-max-width: 900px;
+}
+
+.typing-anim-hero {
+    width: 100%;
+    min-height: var(--tah-min-height);
+    padding: var(--tah-padding);
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.typing-anim-hero-content {
+    max-width: var(--tah-max-width);
+}
+
+.typing-anim-hero-title {
+    color: var(--tah-text-color);
+    margin: 0;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 700;
+}
+
+.typing-text {
+    color: var(--tah-highlight-color);
+}
+
+.typing-cursor {
+    display: inline-block;
+    width: 4px;
+    height: 1em;
+    margin-left: 6px;
+    background: var(--tah-highlight-color);
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div id="particles-js"></div>
+    <div class="grid-overlay"></div>
+
+    <header>
+        <nav class="container">
+            <div class="logo">XyrothNight</div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Roles</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="avatar-container">
+                    <div class="avatar" id="avatar"><img src="assets/xyrothnight.png" alt="My Profile" /></div>
+                </div>
+                <div class="hero-text">
+                    <main class="main-content">
+
+    <section class="typing-anim-hero">
+        <div class="typing-anim-hero-content">
+            <h1 class="typing-anim-hero-title">
+                Hi, I’m XyrothNight.<br>
+                I am a <span class="typing-text"></span>
+                <span class="typing-cursor"></span>
+            </h1>
+        </div>
+    </section>
+
+</main>
+                    <div class="hero-buttons">
+                        <a href="#contact" class="btn btn-primary"><b>Contact</b></a>
+                        <a href="#projects" class="btn btn-secondary">Experience</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <p>I’m XyrothNight, based in Dhaka, Bangladesh.
+                <br><br>
+                I started my blockchain journey after higher secondary school and built a solid foundation in on-chain analysis, ecosystem research, and narrative discovery. I’ve contributed to multiple Web3 communities across Ethereum, Solana, Base, Sui, Tron, and several L2 networks, focusing on user behavior and on-chain activity.
+                <br><br>
+                Now I’m growing into a Community Manager & Moderator role supporting projects through clear communication, structured reporting, user support, and strong community management.</p>
+                
+                <div class="highlight-pills">
+                    <div class="pill">
+                        <div class="pill-icon">⛊</div>
+                        <span>Research</span>
+                    </div>
+                    <div class="pill">
+                        <div class="pill-icon">️⚙</div>
+                        <span>Community Management</span>
+                    </div>
+                    <div class="pill">
+                        <div class="pill-icon">🗨</div>
+                        <span>Moderation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="projects">
+        <div class="container">
+            <h2 class="section-title">Current Roles</h2>
+            <div class="projects-grid">
+                <div class="project-card" data-project="flow">
+                    <div class="project-icon"><img src="assets/redstone.png" alt="Profile Avatar"></div>
+                    <h3>RedStone Oracle</h3>
+                    <small>(August 2025-Present)</small>
+                    <h4>Ambassador</h4>
+                    <p>RedStone delivers data feeds for 1,300+ assets across 110+ blockchains, is used by 170+ clients, and ranks as the third-largest oracle by secured (TVS)</p>
+                    <button class="btn btn-secondary" onclick="window.open('https://thoracic-daphne-8f9.notion.site/RedStone-2d60cb86f736818b8280dfaf52d05629?source=copy_link', '_blank')">📄 View PoW</button>
+                </div>
+                
+                <div class="project-card" data-project="narrative">
+                    <div class="project-icon"><img src="/assets/ambnetic.jpg" alt="Profile Avatar"></div>
+                    <h3>AmbNetic</h3>
+                    <h4>Admin Panel</h4>
+                    <p>AmbNetic is a Alpha hub that guides the community into Web3 through education &  mentorship. We provides practical research signals and project hunts to build real skills.</p>
+                    <button class="btn btn-secondary" onclick="window.open('https://thoracic-daphne-8f9.notion.site/AmbNetic-2d60cb86f736818ba350d281000df2ca?source=copy_link', '_blank')">📄 View PoW</button>
+                </div>
+
+                <div class="project-card" data-project="narrative">
+                    <div class="project-icon"><img src="/assets/whispers.jpg" alt="Profile Avatar"></div>
+                    <h3>Whispers</h3>
+                    <h4>Community Manager</h4>
+                    <p>Whispers is a Alpha hub on discord for Moderators. It's guides the community through education &  mentorship for their future jobs</p>
+                    <button class="btn btn-secondary" onclick="window.open('https://thoracic-daphne-8f9.notion.site/Whispers-2d60cb86f73681f98c37d7462840f2e1?source=copy_link', '_blank')">📄 View PoW</button>
+                </div>
+
+                <div class="project-card" data-project="narrative">
+                    <div class="project-icon"><img src="/assets/flux.jpg" alt="Profile Avatar"></div>
+                    <h3>Flux</h3>
+                    <h4>Moderator</h4>
+                    <p>Flux is a premier Web3 Alpha hub on discord that delivers curated mint alerts, market signals, and real-time on-chain intelligence to a rapidly expanding network of traders and builders.</p>
+                    <button class="btn btn-secondary" onclick="window.open('https://x.com/Fluxio_', '_blank')">View Community</button>
+                </div>
+
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="skills">
+        <div class="container">
+            <h2 class="section-title">Skills</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Community Management</h3>
+                        <p>
+                            Building and nurturing engaged Web3 communities<br>
+                            Able to simplify project updates, manage user questions, and keep the community engaged across social platforms.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Art & visual</h3>
+                        <p>Design graphics that align with Web3 branding styles, project identity, and announcement formats.<br>
+                        Developing original artworks with a focus on mood, style, and visual expression across digital mediums.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>Communication</h3>
+                        <p>Skilled in writing clear, concise, and impactful posts that match project branding and help simplify complex information.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>User Support & Onboarding</h3>
+                        <p>Help new members understand the project, guide them through the basics, and provide clear, friendly answers to common questions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Contact Info</h2>
+            <div class="contact-buttons">
+                <a href="https://x.com/XyrothNight" target="_blank" class="contact-btn">
+                    <span>𝕏</span>
+                    <span>Twitter</span>
+                </a>
+                <a href="mailto:xyrothnight@gmail.com" target="_blank" class="contact-btn">
+                    <span>✉</span>
+                    <span>Email</span>
+                    </a>
+                    <a href="https://discord.com/users/1297870163848335405" target="_blank" class="contact-btn">
+                    <span>👥</span>
+                    <span>Discord</span>
+                </a>
+                <a href="https://link3.to/xyrothnight" target="_blank" class="contact-btn">
+                    <span>See More</span>
+                </a>
+            <a href="https://calendar.app.google/cWrrCDJYnV7Qoc6u9" target="_blank" class="btn btn-primary"><b>Schedule a Meeting</b></a>
+                </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy;2022-2026 XyrothNight. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="crypto-ticker">
+        <div class="ticker-content">
+            <div class="ticker-item">
+                <span>BTC</span>
+                <span class="ticker-price" id="btc-price">$--,---</span>
+            </div>
+            <div class="ticker-item">
+                <span>ETH</span>
+                <span class="ticker-price" id="eth-price">$--,---</span>
+            </div>
+            <div class="ticker-item">
+                <span>SOL</span>
+                <span class="ticker-price" id="sol-price">$---</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 id="modal-title"></h2>
+            <p id="modal-description"></p>
+            <div class="modal-tags" id="modal-tags"></div>
+        </div>
+    </div>
+
+    <script>
+        // Particle.js Configuration
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#00B0FF' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.3, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#00B0FF',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: { enable: true, mode: 'grab' },
+                    onclick: { enable: true, mode: 'push' },
+                    resize: true
+                },
+                modes: {
+                    grab: { distance: 140, line_linked: { opacity: 1 } },
+                    push: { particles_nb: 4 }
+                }
+            },
+            retina_detect: true
+        });
+
+        // Loading Animation
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                }, 500);
+            }, 1000);
+        });
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero Text Animation
+        gsap.to('.hero-text', {
+            opacity: 1,
+            x: 0,
+            duration: 1.2,
+            delay: 1.2,
+            ease: 'power3.out'
+        });
+
+        // Section Title Animations
+        gsap.utils.toArray('.section-title').forEach(title => {
+            gsap.to(title, {
+                scrollTrigger: {
+                    trigger: title,
+                    start: 'top 80%',
+                    toggleActions: 'play none none none'
+                },
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out'
+            });
+            gsap.set(title, { y: 30 });
+        });
+
+        // About Section Animation
+        gsap.to('.about-content p', {
+            scrollTrigger: {
+                trigger: '.about-content',
+                start: 'top 70%'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out'
+        });
+        gsap.set('.about-content p', { y: 20 });
+
+        // Pills Animation
+        gsap.utils.toArray('.pill').forEach((pill, index) => {
+            gsap.to(pill, {
+                scrollTrigger: {
+                    trigger: pill,
+                    start: 'top 80%'
+                },
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                delay: index * 0.1,
+                ease: 'back.out(1.7)'
+            });
+            gsap.set(pill, { y: 30 });
+        });
+
+        // Project Cards Animation
+        gsap.utils.toArray('.project-card').forEach((card, index) => {
+            gsap.to(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 80%'
+                },
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                delay: index * 0.15,
+                ease: 'power3.out'
+            });
+            gsap.set(card, { y: 50 });
+        });
+
+        // Timeline Items Animation
+        gsap.utils.toArray('.timeline-item').forEach((item, index) => {
+            const isEven = index % 2 === 0;
+            gsap.to(item, {
+                scrollTrigger: {
+                    trigger: item,
+                    start: 'top 75%'
+                },
+                opacity: 1,
+                x: 0,
+                duration: 0.8,
+                ease: 'power3.out'
+            });
+            gsap.set(item, { x: isEven ? -50 : 50 });
+        });
+
+        // Contact Buttons Animation
+        gsap.utils.toArray('.contact-btn').forEach((btn, index) => {
+            gsap.to(btn, {
+                scrollTrigger: {
+                    trigger: btn,
+                    start: 'top 85%'
+                },
+                opacity: 1,
+                scale: 1,
+                duration: 0.6,
+                delay: index * 0.1,
+                ease: 'back.out(1.7)'
+            });
+            gsap.set(btn, { scale: 0.8 });
+        });
+
+        // Avatar Parallax Effect
+        const avatar = document.getElementById('avatar');
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            
+            gsap.to(avatar, {
+                rotateY: x,
+                rotateX: -y,
+                duration: 0.5,
+                ease: 'power2.out'
+            });
+        });
+
+        // 3D Card Tilt Effect
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+            });
+        });
+
+        // Crypto Price Ticker (Mock Data)
+        async function updateCryptoPrices() {
+    try {
+        const response = await fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd"
+        );
+
+        const data = await response.json();
+
+        document.getElementById('btc-price').textContent = `$${data.bitcoin.usd.toLocaleString()}`;
+        document.getElementById('eth-price').textContent = `$${data.ethereum.usd.toLocaleString()}`;
+        document.getElementById('sol-price').textContent = `$${data.solana.usd.toFixed(2)}`;
+    } catch (error) {
+        console.log("Error fetching prices:", error);
+    }
+}
+
+updateCryptoPrices();
+setInterval(updateCryptoPrices, 5000); // refresh every 5 sec
+        
+
+        // Modal System
+        const projectData = {
+            flow: {
+                title: 'RedStone Oracles',
+                description: 'Serving as an Ambassador for RedStone Oracles, where I focus on community engagement and consistent ecosystem visibility on X. My work includes sharing clear updates, supporting users with accurate guidance, and helping strengthen RedStone’s presence across social platforms. I contribute by simplifying complex concepts, amplifying major announcements, and maintaining an active presence in community discussions. Over time, I’ve built a reliable communication style that aligns with RedStone’s standards and supports its growing ecosystem. This Proof of Work outlines my contributions, achievements, and ongoing commitment to the RedStone community.',
+                tags: ['View Proof Of Work']
+            },
+            narrative: {
+                title: 'AmbNetic',
+                description: 'An AI-powered system that combines on-chain data analysis with natural language processing to identify emerging crypto narratives before they trend. The engine aggregates data from transaction patterns, token deployments, social media sentiment, and liquidity flows. Using machine learning models trained on historical narrative cycles, it predicts trend emergence with 76% accuracy 2-4 weeks in advance. Successfully predicted the rise of AI agents narrative in Q4 2024 and the liquid staking derivatives wave in early 2024.',
+                tags: ['Python', 'NLP', 'Machine Learning', 'GraphQL', 'Sentiment Analysis', 'Time Series']
+            },
+            watcher: {
+                title: 'Multi-Chain Watcher',
+                description: 'Comprehensive cross-chain analytics dashboard monitoring whale activity and smart money patterns across 15+ blockchain networks including Ethereum, Solana, Arbitrum, Base, and emerging L2s. The system tracks over 50,000 identified whale wallets, monitoring their positions, trades, and capital allocation strategies. Features pattern recognition for front-running detection, coordinated buying/selling identification, and smart money portfolio replication strategies. Provides real-time alerts via Telegram and email for significant movements.',
+                tags: ['Multi-chain', 'Big Data', 'PostgreSQL', 'Redis', 'React', 'WebSocket', 'Telegram Bot']
+            }
+        };
+
+        function openModal(project) {
+            const modal = document.getElementById('modal');
+            const data = projectData[project];
+            
+            document.getElementById('modal-title').textContent = data.title;
+            document.getElementById('modal-description').textContent = data.description;
+            
+            const tagsContainer = document.getElementById('modal-tags');
+            tagsContainer.innerHTML = '';
+            data.tags.forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag';
+                tagElement.textContent = tag;
+                tagsContainer.appendChild(tagElement);
+            });
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on outside click
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                closeModal();
+            }
+        });
+
+        // Connect Wallet Function
+        function connectWallet() {
+            alert('Wallet connection feature - integrate with WalletConnect or MetaMask');
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add glow effect on scroll
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            const header = document.querySelector('header');
+            
+            if (currentScroll > 100) {
+                header.style.boxShadow = '0 5px 30px rgba(0, 176, 255, 0.2)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Easter egg: Konami code
+        let konamiCode = [];
+        const konamiPattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            konamiCode = konamiCode.slice(-10);
+            
+            if (konamiCode.join('') === konamiPattern.join('')) {
+                document.body.style.animation = 'rainbow 2s linear infinite';
+                setTimeout(() => {
+                    document.body.style.animation = '';
+                }, 5000);
+            }
+        });
+        /* ================= Typing Animation ================= */
+(function () {
+    const typedTextSpan = document.querySelector(".typing-text");
+    const cursorSpan = document.querySelector(".typing-cursor");
+
+    if (!typedTextSpan || !cursorSpan) return;
+
+    const textArray = [
+        "Researcher",
+        "Community Manager",
+        "Designer",
+        "Problem Solver",
+        "Creative"
+    ];
+
+    const typingDelay = 120;
+    const erasingDelay = 80;
+    const newTextDelay = 1600;
+
+    let textArrayIndex = 0;
+    let charIndex = 0;
+
+    function type() {
+        if (charIndex < textArray[textArrayIndex].length) {
+            typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+            charIndex++;
+            setTimeout(type, typingDelay);
+        } else {
+            setTimeout(erase, newTextDelay);
+        }
+    }
+
+    function erase() {
+        if (charIndex > 0) {
+            typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
+            charIndex--;
+            setTimeout(erase, erasingDelay);
+        } else {
+            textArrayIndex = (textArrayIndex + 1) % textArray.length;
+            setTimeout(type, typingDelay);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(type, 800);
+    });
+})();
+    </script>
+</body>
+</html>
